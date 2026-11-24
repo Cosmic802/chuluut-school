@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("ADMIN") // SUPER_ADMIN | ADMIN
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+}
+
+model Photo {
+  id          String   @id @default(cuid())
+  filePath    String
+  title       String
+  description String   @default("")
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model SchoolInfo {
+  id        String   @id
+  body      String   @default("")
+  logoPath  String?
+  imagePath String?
+  updatedAt DateTime @updatedAt
+}
+
+model NewsPost {
+  id          String   @id @default(cuid())
+  title       String
+  body        String
+  publishedAt DateTime
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  userEmail String
+  action    String
+  entity    String
+  entityId  String
+  createdAt DateTime @default(now())
+}
